@@ -63,7 +63,7 @@ namespace picacomic
         {
             //String s="";
             Log("=============================================");
-            Log($"开始运行第{index + 1}个账号");
+            Log($"运行第{index + 1}个账号");
             //s=s+ $"开始运行第{index + 1}个账号" + Environment.NewLine;
             logBuilder.AppendLine($"开始运行第{index + 1}个账号");
             
