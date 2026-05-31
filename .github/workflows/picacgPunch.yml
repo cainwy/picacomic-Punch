@@ -37,8 +37,25 @@ jobs:
       run: dotnet build -c Release
       
     - name: Run
+      id: run
       env:        
         accounts: ${{secrets.ACCOUNTS}}
       run: dotnet run -- ${accounts}
+    - name: Telegram Notify
+      env:
+        TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN}}
+        TELEGRAM_TO: ${{secrets.TELEGRAM_TO}}
+      if: ${{ success() && env.TELEGRAM_TOKEN && env.TELEGRAM_TO }}
+      uses: appleboy/telegram-action@master
+      with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          message: |
+            *哔咔漫画 自动签到*
+
+            ${{ steps.run.outputs.result  }}
+
+            [任务详情](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
      
         
