@@ -16,6 +16,7 @@ namespace picacomic
     }
     class Program
     {
+        private static StringBuilder logBuilder = new StringBuilder();
         static async System.Threading.Tasks.Task Main(string[] args)
         {
             if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
@@ -46,6 +47,7 @@ namespace picacomic
             {
                 await PunchAsync(Accounts[i].username, Accounts[i].password, i);
             }
+            SetGithubOutput("result", logBuilder.ToString());
         }
 
         private static void Log(object o)
@@ -57,13 +59,13 @@ namespace picacomic
             string content = $"{name}<<EOF\n{value}\nEOF\n";
             File.AppendAllText(githubOutput, content, Encoding.UTF8);
         }
-
         private static async Task PunchAsync(string username,string password,int index)
         {
-            String s="";
+            //String s="";
             Log("=============================================");
             Log($"开始运行第{index + 1}个账号");
-            s=s+ $"开始运行第{index + 1}个账号" + Environment.NewLine;
+            //s=s+ $"开始运行第{index + 1}个账号" + Environment.NewLine;
+            logBuilder.AppendLine($"开始运行第{index + 1}个账号");
             
             Login login = await PicacomicUrl.Login(username, password);
             Log("登录成功1");
@@ -79,13 +81,19 @@ namespace picacomic
                 Profile profile_punch = await PicacomicUrl.Profile();
                 Log($"等级：{profile_punch.User.Level}");
                 Log($"当前经验：{profile_punch.User.Exp}");
-                s=s+$"昵称：{profile.User.Name}"+Environment.NewLine+$"等级：{profile_punch.User.Level}"+Environment.NewLine+$"当前经验：{profile_punch.User.Exp}"+Environment.NewLine;
-                SetGithubOutput("result",s);
+                //s=s+$"昵称：{profile.User.Name}"+Environment.NewLine+$"等级：{profile_punch.User.Level}"+Environment.NewLine+$"当前经验：{profile_punch.User.Exp}"+Environment.NewLine;
+                logBuilder.AppendLine($"昵称：{profile.User.Name}");
+                logBuilder.AppendLine($"等级：{profile_punch.User.Level}");
+                logBuilder.AppendLine($"当前经验：{profile_punch.User.Exp}");
+                logBuilder.AppendLine("");
+                //SetGithubOutput("result",s);
             }
             else
             {
-                s=s+"签到失败";
-                SetGithubOutput("result",s);
+                //s=s+"签到失败";
+                logBuilder.AppendLine("签到失败");
+                logBuilder.AppendLine("");
+                //SetGithubOutput("result",s);
                 throw new Exception("签到失败");
             }
         }
