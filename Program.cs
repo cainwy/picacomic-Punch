@@ -57,7 +57,7 @@ namespace picacomic
             Log($"开始运行第{index + 1}个账号");
 
             Login login = await PicacomicUrl.Login(username, password);
-            Log("登录成功");
+            Log("登录成功1");
             Header.SetAuthorization(login.Authorization);
             Log("开始获取人物信息");
             Profile profile = await PicacomicUrl.Profile();
@@ -79,4 +79,7 @@ namespace picacomic
 
     }
 }
- 
+
+
+
+
