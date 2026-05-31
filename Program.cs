@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using picacomic;
 using picacomic.Http.Response;
+using System.IO;
+using System.Text;
 
 namespace picacomic
 {
@@ -50,12 +52,19 @@ namespace picacomic
         {
             Console.WriteLine($"[{DateTime.Now.ToString("HH:mm:ss")}]{o.ToString()}");
         }
+        private static void SetGithubOutput(string name, string value){
+            string githubOutput = Environment.GetEnvironmentVariable("GITHUB_OUTPUT");
+            string content = $"{name}<<EOF\n{value}\nEOF\n";
+            File.AppendAllText(githubOutput, content, Encoding.UTF8);
+        }
 
         private static async Task PunchAsync(string username,string password,int index)
         {
+            String s="";
             Log("=============================================");
             Log($"开始运行第{index + 1}个账号");
-
+            s=s+ $"开始运行第{index + 1}个账号" + Environment.NewLine;
+            
             Login login = await PicacomicUrl.Login(username, password);
             Log("登录成功1");
             Header.SetAuthorization(login.Authorization);
@@ -70,9 +79,13 @@ namespace picacomic
                 Profile profile_punch = await PicacomicUrl.Profile();
                 Log($"等级：{profile_punch.User.Level}");
                 Log($"当前经验：{profile_punch.User.Exp}");
+                s=s+$"昵称：{profile.User.Name}"+Environment.NewLine+$"等级：{profile_punch.User.Level}"+Environment.NewLine+$"当前经验：{profile_punch.User.Exp}"+Environment.NewLine;
+                SetGithubOutput("result",s);
             }
             else
             {
+                s=s+"签到失败";
+                SetGithubOutput("result",s);
                 throw new Exception("签到失败");
             }
         }
