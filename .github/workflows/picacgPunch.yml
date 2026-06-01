@@ -12,7 +12,7 @@ on:
     
   workflow_dispatch:  
   schedule:
-    - cron: '2 4 * * *'
+    - cron: '20 4 * * *'
 
 jobs:
 
@@ -38,7 +38,7 @@ jobs:
     - name: Start time
       id: startTime
       run: |
-        echo "sTime=$(date -u +'%Y-%m-%d %H:%M:%S')" >>$GITHUB_OUTPUT
+        echo "sTime=$(date +'%Y-%m-%d %H:%M:%S')" >>$GITHUB_OUTPUT
     - name: Run
       id: run
       env:        
@@ -47,7 +47,7 @@ jobs:
     - name: End time
       id: endTime
       run: |
-        echo "eTime=$(date -u +'%Y-%m-%d %H:%M:%S')" >>$GITHUB_OUTPUT
+        echo "eTime=$(date +'%Y-%m-%d %H:%M:%S')" >>$GITHUB_OUTPUT
     - name: Telegram Notify
       env:
         TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN}}
@@ -66,5 +66,4 @@ jobs:
             ==结束时间:${{steps.endTime.outputs.eTime}}==
             
             [任务详情](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-     
-        
+            ================
