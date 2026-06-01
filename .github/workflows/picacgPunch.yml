@@ -35,12 +35,19 @@ jobs:
       
     - name: Build
       run: dotnet build -c Release
-      
+    - name: Start time
+      id: startTime
+      run: |
+        echo "sTime=$(date -u +'%Y-%m-%d %H:%M:%S')" >>$GITHUB_OUTPUT
     - name: Run
       id: run
       env:        
         accounts: ${{secrets.ACCOUNTS}}
       run: dotnet run -- ${accounts}
+    - name: End time
+      id: endTime
+      run: |
+        echo "eTime=$(date -u +'%Y-%m-%d %H:%M:%S')" >>$GITHUB_OUTPUT
     - name: Telegram Notify
       env:
         TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN}}
@@ -53,9 +60,11 @@ jobs:
           format: markdown
           message: |
             *哔咔漫画 自动签到*
-
+            
+            ==开始时间:${{steps.startTime.outputs.sTime}}==
             ${{ steps.run.outputs.result  }}
-
+            ==结束时间:${{steps.startTime.outputs.eTime}}==
+            
             [任务详情](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
      
         
