@@ -12,7 +12,7 @@ on:
     
   workflow_dispatch:  
   schedule:
-    - cron: '20 4 * * *'
+    - cron: '40 4 * * *'
 
 jobs:
 
@@ -59,6 +59,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           format: markdown
           message: |
+            ================================
             *哔咔漫画 自动签到*
             
             ==开始时间:${{steps.startTime.outputs.sTime}}==
@@ -66,4 +67,4 @@ jobs:
             ==结束时间:${{steps.endTime.outputs.eTime}}==
             
             [任务详情](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-            ================
+            ================================
