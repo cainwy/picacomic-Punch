@@ -12,7 +12,7 @@ on:
     
     
   schedule:
-    - cron: '2 2 * * *'
+    - cron: '50 3 * * *'
 
 jobs:
 
@@ -63,7 +63,7 @@ jobs:
             
             ==开始时间:${{steps.startTime.outputs.sTime}}==
             ${{ steps.run.outputs.result  }}
-            ==结束时间:${{steps.startTime.outputs.eTime}}==
+            ==结束时间:${{steps.endTime.outputs.eTime}}==
             
             [任务详情](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
      
